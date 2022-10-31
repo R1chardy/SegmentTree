@@ -14,7 +14,7 @@ SegmentTree::SegmentTree(std::vector<int>& vec) {
     maxArr = new int[2*n];
     memset(minArr, 0, sizeof(*minArr));
     memset(maxArr, 0, sizeof(*maxArr));
-    for(int i = n; i < n+n; i++){
+    for(int i = n; i < 2*n; i++){
         minArr[i] = vec[i-n];
         maxArr[i] = vec[i-n];
     }
@@ -22,6 +22,37 @@ SegmentTree::SegmentTree(std::vector<int>& vec) {
         maxArr[i] = std::max(maxArr[2*i], maxArr[2*i+1]);
         minArr[i] = std::min(minArr[2*i], minArr[2*i+1]);
     }
+}
+
+SegmentTree::SegmentTree(SegmentTree& other){
+    n = other.n;
+    minArr = new int[2*n];
+    maxArr = new int[2*n];
+    for(int i = 0; i < 2*n; i++){
+        minArr[i] = other.minArr[i];
+        maxArr[i] = other.maxArr[i];
+    }
+}
+
+SegmentTree& SegmentTree::operator=(const SegmentTree& other){
+    if(this == &other){
+        return *this;
+    }
+    n = other.n;
+    delete [] minArr;
+    delete [] maxArr;
+    minArr = new int[2*n];
+    maxArr = new int[2*n];
+    for(int i = 0; i < 2*n; i++){
+        minArr[i] = other.minArr[i];
+        maxArr[i] = other.maxArr[i];
+    }
+    return *this;
+}
+
+SegmentTree::~SegmentTree() {
+    delete [] minArr;
+    delete [] maxArr;
 }
 
 void SegmentTree::update(int i, int x){
